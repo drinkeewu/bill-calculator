@@ -98,7 +98,25 @@ export default {
       return counts.length > 0 ? counts.reduce(reducer) : 0;
     }
   },
+  watch: {
+    billList:  {
+      deep: true,
+      handler(val) {
+        this.refresnCache(val)
+      }
+    }
+  },
+  created() {
+    this.getCache()
+  },
   methods: {
+    refresnCache(val){
+      localStorage.setItem('bill_list', JSON.stringify(val));
+    },
+    getCache() {
+      const cache = localStorage.getItem('bill_list') || '[]';
+      this.billList = JSON.parse(cache);
+    },  
     addItem() {
       const item = {
         remark: "",
@@ -127,14 +145,14 @@ export default {
 
 <style lang="scss">
 .calculator {
+  margin: 0 auto;
+  width: 800px;
   .table-wrapper {
     .el-table {
-      width: 70%;
       margin: 0 auto;
     }
   }
   .calc-footer {
-    padding-right: 15%;
     .btn-wrapper {
       text-align: right;
     }
