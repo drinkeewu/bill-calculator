@@ -214,6 +214,7 @@ export default {
 </script>
 
 <style lang="scss">
+@import url('//at.alicdn.com/t/font_1172067_wdund4f3e2.css');
 .calculator {
   margin: 0 auto;
   width: 800px;
