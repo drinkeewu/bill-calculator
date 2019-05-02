@@ -1,4 +1,4 @@
-w<template>
+<template>
   <div class="calculator">
     <div class="table-wrapper">
       <h1>Calculator</h1>
