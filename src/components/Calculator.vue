@@ -49,9 +49,15 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="operation" width="100">
+        <el-table-column
+          label="operation"
+          width="100"
+        >
           <template slot-scope="scope">
-            <el-button type="text" @click="deleteItem(scope.row.id)">Delete</el-button>
+            <el-button
+              type="text"
+              @click="deleteItem(scope.row.id)"
+            >Delete</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -59,6 +65,35 @@
 
     <footer class="calc-footer">
       <div class="btn-wrapper">
+        <el-popover
+          placement="top"
+          v-model="popoverShow"
+        >
+            <p>
+              Delete All ?
+            </p>
+          <flex-box
+            justify="flex-end"
+          >
+            <el-button
+              size="mini"
+              type="text"
+              @click="hidePopover"
+            >
+              Cancel
+            </el-button>
+            <el-button
+              size="mini"
+              type="danger"
+              @click="resetList"
+            >
+              Yes
+            </el-button>
+          </flex-box>
+          <el-button slot="reference">
+            Clear
+          </el-button>
+        </el-popover>
         <el-button
           type="primary"
           @click="addItem"
@@ -73,7 +108,11 @@
 </template>
 
 <script>
+import FlexBox from "./FlexBox.vue";
 export default {
+  components: {
+    "flex-box": FlexBox
+  },
   data() {
     return {
       remarkOptions: [
@@ -88,7 +127,8 @@ export default {
       billList: [],
       addBtnStyle: {
         marginTop: "20px"
-      }
+      },
+      popoverShow: false
     };
   },
   computed: {
@@ -99,24 +139,24 @@ export default {
     }
   },
   watch: {
-    billList:  {
+    billList: {
       deep: true,
       handler(val) {
-        this.refresnCache(val)
+        this.refresnCache(val);
       }
     }
   },
   created() {
-    this.getCache()
+    this.getCache();
   },
   methods: {
-    refresnCache(val){
-      localStorage.setItem('bill_list', JSON.stringify(val));
+    refresnCache(val) {
+      localStorage.setItem("bill_list", JSON.stringify(val));
     },
     getCache() {
-      const cache = localStorage.getItem('bill_list') || '[]';
+      const cache = localStorage.getItem("bill_list") || "[]";
       this.billList = JSON.parse(cache);
-    },  
+    },
     addItem() {
       const item = {
         remark: "",
@@ -127,7 +167,7 @@ export default {
       this.billList.push(item);
     },
     deleteItem(id) {
-      this.billList = this.billList.filter(item => item.id !== id)
+      this.billList = this.billList.filter(item => item.id !== id);
     },
     isSelected(item) {
       const remarks = this.billList.map(bill => bill.remark);
@@ -138,6 +178,12 @@ export default {
     },
     onInputTypeChange(val, index) {
       this.$set(this.billList[index], "remark", "");
+    },
+    resetList() {
+      this.billList = [];
+    },
+    hidePopover() {
+      this.popoverShow = false;
     }
   }
 };
@@ -153,8 +199,13 @@ export default {
     }
   }
   .calc-footer {
+    .el-button {
+      margin-top: 20px;
+      margin-left: 10px;
+    }
     .btn-wrapper {
-      text-align: right;
+      display: flex;
+      justify-content: flex-end;
     }
     .total-text {
       font-weight: bold;
