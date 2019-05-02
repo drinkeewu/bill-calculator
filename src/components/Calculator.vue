@@ -1,4 +1,4 @@
-<template>
+w<template>
   <div class="calculator">
     <div class="table-wrapper">
       <h1>Calculator</h1>
@@ -43,9 +43,14 @@
           </template>
         </el-table-column>
 
+        <!-- 输入数值 -->
         <el-table-column label="amount">
           <template slot-scope="scope">
-            <el-input v-model.number="scope.row.count" />
+            <el-input
+              :ref="scope.row.id"
+              v-model.number="scope.row.count"
+              @keyup.enter.native="addItem"
+            />
           </template>
         </el-table-column>
 
@@ -55,6 +60,7 @@
         >
           <template slot-scope="scope">
             <el-button
+              class="delete-button"
               type="text"
               @click="deleteItem(scope.row.id)"
             >Delete</el-button>
@@ -69,12 +75,10 @@
           placement="top"
           v-model="popoverShow"
         >
-            <p>
-              Delete All ?
-            </p>
-          <flex-box
-            justify="flex-end"
-          >
+          <p>
+            Delete All ?
+          </p>
+          <flex-box justify="flex-end">
             <el-button
               size="mini"
               type="text"
@@ -85,12 +89,15 @@
             <el-button
               size="mini"
               type="danger"
-              @click="resetList"
+              @click="onClearAll"
             >
               Yes
             </el-button>
           </flex-box>
-          <el-button slot="reference">
+          <el-button
+            slot="reference"
+            :disabled="isEmpty"
+          >
             Clear
           </el-button>
         </el-popover>
@@ -136,6 +143,9 @@ export default {
       const counts = this.billList.map(bill => bill.count) || [];
       const reducer = (a, c) => +a + +c;
       return counts.length > 0 ? counts.reduce(reducer) : 0;
+    },
+    isEmpty() {
+      return this.billList.length === 0;
     }
   },
   watch: {
@@ -146,8 +156,12 @@ export default {
       }
     }
   },
+
   created() {
     this.getCache();
+  },
+  updated() {
+    console.log("updated");
   },
   methods: {
     refresnCache(val) {
@@ -165,6 +179,12 @@ export default {
         id: new Date().getTime()
       };
       this.billList.push(item);
+      this.$nextTick(() => {
+        this.focusInput(item.id);
+      });
+    },
+    focusInput(refName) {
+      this.$refs[refName].focus();
     },
     deleteItem(id) {
       this.billList = this.billList.filter(item => item.id !== id);
@@ -184,6 +204,10 @@ export default {
     },
     hidePopover() {
       this.popoverShow = false;
+    },
+    onClearAll() {
+      this.resetList();
+      this.hidePopover();
     }
   }
 };
@@ -196,6 +220,13 @@ export default {
   .table-wrapper {
     .el-table {
       margin: 0 auto;
+    }
+  }
+  .delete-button {
+    color: #F56C6C;
+    &:hover {
+      color: #F56C6C;
+      opacity: .6;
     }
   }
   .calc-footer {
