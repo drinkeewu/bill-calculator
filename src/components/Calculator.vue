@@ -160,9 +160,6 @@ export default {
   created() {
     this.getCache();
   },
-  updated() {
-    console.log("updated");
-  },
   methods: {
     refresnCache(val) {
       localStorage.setItem("bill_list", JSON.stringify(val));
