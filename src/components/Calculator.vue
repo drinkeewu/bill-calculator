@@ -30,14 +30,16 @@
                   :value="item"
                   :label="item"
                   :key="`pf-op-${index}`"
-                  :disabled="isSelected(item)"
                 />
               </el-select>
             </template>
 
             <!-- 输入框模式 -->
             <template v-else>
-              <el-input v-model="scope.row.remark" />
+              <el-input 
+                :ref="scope.row.id"
+                v-model="scope.row.remark" 
+              />
             </template>
 
           </template>
@@ -47,8 +49,7 @@
         <el-table-column label="amount">
           <template slot-scope="scope">
             <el-input
-              :ref="scope.row.id"
-              v-model.number="scope.row.count"
+              v-model="scope.row.count"
               @keyup.enter.native="addItem"
             />
           </template>
@@ -142,7 +143,7 @@ export default {
     total() {
       const counts = this.billList.map(bill => bill.count) || [];
       const reducer = (a, c) => +a + +c;
-      return counts.length > 0 ? counts.reduce(reducer) : 0;
+      return counts.length > 0 ? counts.reduce(reducer).toFixed(2) : 0;
     },
     isEmpty() {
       return this.billList.length === 0;
