@@ -1,3 +1,3 @@
 module.exports = {
-  publicPath: process.env.NODE_ENV === 'development' ? '' : '/auto-calculator/dist/'
+  publicPath: process.env.NODE_ENV === 'development' ? '' : '/bill-calculator/dist/'
 }
