@@ -9,12 +9,11 @@
         <el-table-column label="input-type">
           <template scope="scope">
             <el-switch
-              @change="onInputTypeChange($event, scope.$index)"
               v-model="scope.row.selectType"
               active-text="select"
               inactive-text="input"
-            >
-            </el-switch>
+              @change="onInputTypeChange($event, scope.$index)"
+            />
           </template>
         </el-table-column>
         <el-table-column label="remark">
@@ -27,21 +26,20 @@
               >
                 <el-option
                   v-for="(item, index) in remarkOptions"
+                  :key="`pf-op-${index}`"
                   :value="item"
                   :label="item"
-                  :key="`pf-op-${index}`"
                 />
               </el-select>
             </template>
 
             <!-- 输入框模式 -->
             <template v-else>
-              <el-input 
+              <el-input
                 :ref="scope.row.id"
-                v-model="scope.row.remark" 
+                v-model="scope.row.remark"
               />
             </template>
-
           </template>
         </el-table-column>
 
@@ -64,7 +62,9 @@
               class="delete-button"
               type="text"
               @click="deleteItem(scope.row.id)"
-            >Delete</el-button>
+            >
+              Delete
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -73,8 +73,8 @@
     <footer class="calc-footer">
       <div class="btn-wrapper">
         <el-popover
-          placement="top"
           v-model="popoverShow"
+          placement="top"
         >
           <p>
             Delete All ?
@@ -104,39 +104,42 @@
         </el-popover>
         <el-button
           type="primary"
-          @click="addItem"
           :style="addBtnStyle"
+          @click="addItem"
         >
           ADD
         </el-button>
       </div>
-      <p class="total-text">Total: {{total || 0}}</p>
+      <p class="total-text">
+        Total: {{ total || 0 }}
+      </p>
     </footer>
   </div>
 </template>
 
 <script>
-import FlexBox from "./FlexBox.vue";
+import FlexBox from './FlexBox.vue';
+
 export default {
   components: {
-    "flex-box": FlexBox
+    'flex-box': FlexBox,
   },
   data() {
     return {
       remarkOptions: [
-        "京东白条",
-        "京东金条",
-        "花呗",
-        "借呗",
-        "农商银行",
-        "招商银行",
-        "广发银行"
+        '京东白条',
+        '京东金条',
+        '花呗',
+        '借呗',
+        '农商银行',
+        '招商银行',
+        '广发银行',
       ],
       billList: [],
       addBtnStyle: {
-        marginTop: "20px"
+        marginTop: '20px',
       },
-      popoverShow: false
+      popoverShow: false,
     };
   },
   computed: {
@@ -147,15 +150,15 @@ export default {
     },
     isEmpty() {
       return this.billList.length === 0;
-    }
+    },
   },
   watch: {
     billList: {
       deep: true,
       handler(val) {
         this.refresnCache(val);
-      }
-    }
+      },
+    },
   },
 
   created() {
@@ -163,18 +166,18 @@ export default {
   },
   methods: {
     refresnCache(val) {
-      localStorage.setItem("bill_list", JSON.stringify(val));
+      localStorage.setItem('bill_list', JSON.stringify(val));
     },
     getCache() {
-      const cache = localStorage.getItem("bill_list") || "[]";
+      const cache = localStorage.getItem('bill_list') || '[]';
       this.billList = JSON.parse(cache);
     },
     addItem() {
       const item = {
-        remark: "",
+        remark: '',
         count: 0,
         selecteType: false,
-        id: new Date().getTime()
+        id: new Date().getTime(),
       };
       this.billList.push(item);
       this.$nextTick(() => {
@@ -195,7 +198,7 @@ export default {
       return item.selectType;
     },
     onInputTypeChange(val, index) {
-      this.$set(this.billList[index], "remark", "");
+      this.$set(this.billList[index], 'remark', '');
     },
     resetList() {
       this.billList = [];
@@ -206,8 +209,8 @@ export default {
     onClearAll() {
       this.resetList();
       this.hidePopover();
-    }
-  }
+    },
+  },
 };
 </script>
 
