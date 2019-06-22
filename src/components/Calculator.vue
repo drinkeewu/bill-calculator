@@ -1,7 +1,13 @@
 <template>
   <div class="calculator">
     <div class="table-wrapper">
-      <h1>Calculator</h1>
+      <h1 class="calculator-title">
+        {{ title }}
+        <i
+          class="el-icon-edit-outline"
+          @click="handleEditTitle"
+        />
+      </h1>
       <el-table
         border
         :data="billList"
@@ -140,13 +146,14 @@ export default {
         marginTop: '20px',
       },
       popoverShow: false,
+      title: 'Bill',
     };
   },
   computed: {
     total() {
       const counts = this.billList.map(bill => bill.count) || [];
       const reducer = (a, c) => +a + +c;
-      return counts.length > 0 ? counts.reduce(reducer).toFixed(2) : 0;
+      return counts.length > 0 ? parseFloat(counts.reduce(reducer)).toFixed(2) : 0;
     },
     isEmpty() {
       return this.billList.length === 0;
@@ -159,6 +166,9 @@ export default {
         this.refresnCache(val);
       },
     },
+    title(val) {
+      localStorage.setItem('cal_title', val);
+    },
   },
 
   created() {
@@ -170,7 +180,9 @@ export default {
     },
     getCache() {
       const cache = localStorage.getItem('bill_list') || '[]';
+      const title = localStorage.getItem('cal_title') || 'Bill';
       this.billList = JSON.parse(cache);
+      this.title = title;
     },
     addItem() {
       const item = {
@@ -210,6 +222,15 @@ export default {
       this.resetList();
       this.hidePopover();
     },
+    handleEditTitle() {
+      this.$prompt('输入标题', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        inputValue: this.title,
+      }).then(({ value }) => {
+        this.title = value;
+      });
+    },
   },
 };
 </script>
@@ -219,6 +240,20 @@ export default {
 .calculator {
   margin: 0 auto;
   width: 800px;
+  &-title {
+    line-height: 1;
+    i {
+      display: none;
+      color: #999;
+      font-size: 22px;
+      cursor: pointer;
+    }
+    &:hover {
+      i {
+        display: inline;
+      }
+    }
+  }
   .table-wrapper {
     .el-table {
       margin: 0 auto;
