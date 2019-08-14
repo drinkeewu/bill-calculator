@@ -5,7 +5,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "cm": "git-cz"
   },
   "dependencies": {
     "@vue/eslint-config-airbnb": "^4.0.0",
@@ -21,7 +22,9 @@
     "babel-eslint": "^10.0.1",
     "eslint": "^5.8.0",
     "eslint-plugin-vue": "^5.0.0",
-    "vue-template-compiler": "^2.5.21"
+    "vue-template-compiler": "^2.5.21",
+    "commitizen": "^3.1.1",
+    "cz-conventional-changelog": "^2.1.0"
   },
   "eslintConfig": {
     "root": true,
@@ -49,5 +52,10 @@
   ],
   "keywords": [],
   "description": "",
-  "homepage": "http://drinkeewu.github.io/auto-calculator/dist"
+  "homepage": "http://drinkeewu.github.io/auto-calculator/dist",
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  }
 }
